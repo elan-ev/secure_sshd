@@ -1,0 +1,17 @@
+---
+- name: converge
+  hosts: all
+  become: true
+  pre_tasks:
+    - name: install sshd
+      package:
+        name: openssh-server
+    - name: enable sshd
+      service:
+        name: sshd
+        enabled: true
+        state: started
+  tasks:
+    - name: include secure_sshd
+      include_role:
+        name: secure_sshd

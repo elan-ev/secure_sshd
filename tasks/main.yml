@@ -1,0 +1,31 @@
+---
+
+- name: sshd config
+  become: true
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  loop:
+    - regexp: '^PasswordAuthentication '
+      line: 'PasswordAuthentication no'
+    - regexp: '^GSSAPIAuthentication '
+      line: 'GSSAPIAuthentication no'
+    - regexp: '^PermitRootLogin '
+      line: 'PermitRootLogin without-password'
+    - regexp: '^KexAlgorithms '
+      line: 'KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256'
+    - regexp: '^Ciphers '
+      line: 'Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr'
+    - regexp: '^MACs '
+      line: 'MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'
+  notify: reload sshd
+
+- name: disable globaly crypot config for sshd
+  become: true
+  lineinfile:
+    dest: /etc/sysconfig/sshd
+    regexp: '^CRYPTO_POLICY='
+    line: 'CRYPTO_POLICY='
+  notify: reload sshd
+  when: ansible_os_family == 'RedHat'
