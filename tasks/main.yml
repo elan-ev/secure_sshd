@@ -12,7 +12,7 @@
     - regexp: '^GSSAPIAuthentication '
       line: 'GSSAPIAuthentication no'
     - regexp: '^PermitRootLogin '
-      line: 'PermitRootLogin without-password'
+      line: 'PermitRootLogin prohibit-password'
     - regexp: '^KexAlgorithms '
       line: 'KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256'
     - regexp: '^Ciphers '
